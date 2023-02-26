@@ -50,7 +50,7 @@ router.post("/create-product/", (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
-	res.send(newProductData);
+	res.send("Data created");
 });
 
 //update product
@@ -75,7 +75,7 @@ router.put("/update-product/:id", (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
-	res.send(targetProduct);
+	res.send('Data Updated');
 });
 
 //delete product
@@ -94,7 +94,7 @@ router.delete("/remove-product/:id", (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
-	res.send("targetProduct");
+	res.send("Data Deleted");
 });
 
 module.exports = router;
