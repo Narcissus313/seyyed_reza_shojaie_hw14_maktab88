@@ -2,6 +2,7 @@ const router = require("express").Router();
 const path = require("path");
 const { writeFileSync } = require("fs");
 const productsData = require("../../products-data.json");
+const availableIds = productsData.map((p) => p.id);
 
 //get all products
 router.get("/get-all-products", (_req, res) => {
@@ -10,15 +11,37 @@ router.get("/get-all-products", (_req, res) => {
 });
 
 //get single product
-router.get("/get-product", (req, res) => {
-	const targetProduct = productsData.find((p) => p.id == req.params.id);
+router.get("/get-product/:id", (req, res) => {
+	const requestedProductId = req.params.id;
+	if (isNaN(requestedProductId)) return res.send("Id is not a number");
+
+	if (!availableIds.includes(+requestedProductId))
+		return res.send("no such a product in the list");
+
+	const targetProduct = productsData.find((p) => p.id == requestedProductId);
 	res.json(targetProduct);
 });
 
 // create product
 router.post("/create-product/", (req, res) => {
 	const newProductData = req.body;
-	productsData.push(newProductData);
+
+	if (!newProductData.id) return res.send("No id in the requested product");
+	if (isNaN(newProductData.id)) return res.send("Invalid id (not a number)");
+	if (availableIds.includes(newProductData.id))
+		return res.send("This user exists");
+
+	const data = {
+		id: null,
+		title: null,
+		price: null,
+		rating: null,
+		stock: null,
+		brand: null,
+		category: null,
+		...newProductData,
+	};
+	productsData.push(data);
 	try {
 		writeFileSync(
 			path.join(__dirname, "../../products-data.json"),
@@ -33,6 +56,12 @@ router.post("/create-product/", (req, res) => {
 //update product
 router.put("/update-product/:id", (req, res) => {
 	const reqData = req.body;
+	const reqId = req.params.id;
+	if (isNaN(reqId)) return res.send("Invalid id (not a number)");
+	if (!availableIds.includes(+reqId))
+		return res.send("This user doesn't exists");
+	if (reqData.id) delete reqData.id;
+
 	const targetProduct = productsData.find((p) => p.id == req.params.id);
 	for (const prop in reqData) {
 		targetProduct[prop] = reqData[prop];
@@ -51,7 +80,11 @@ router.put("/update-product/:id", (req, res) => {
 
 //delete product
 router.delete("/remove-product/:id", (req, res) => {
-	let newData = productsData.filter((p) => p.id != req.params.id);
+	const reqId = req.params.id;
+	if (isNaN(reqId)) return res.send("Invalid id (not a number)");
+	if (!availableIds.includes(+reqId))
+		return res.send("This user doesn't exists");
+	let newData = productsData.filter((p) => p.id != reqId);
 
 	try {
 		writeFileSync(
