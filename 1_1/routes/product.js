@@ -1,20 +1,37 @@
 const router = require("express").Router();
 const path = require("path");
-const { writeFileSync } = require("fs");
-const productsData = require("../../products-data.json");
-const availableIds = productsData.map((p) => p.id);
+const { readFileSync, writeFileSync } = require("fs");
+const readProductsData = () => {
+	return JSON.parse(
+		(productsData = readFileSync(
+			path.join(__dirname, "../../products-data.json")
+		).toString())
+	);
+};
+const writeDataToFile = (data) => {
+	writeFileSync(
+		path.join(__dirname, "../../products-data.json"),
+		JSON.stringify(data)
+	);
+};
+const vaildIds = () => {
+	const productsData = readProductsData();
+	return productsData.map((p) => p.id);
+};
 
 //get all products
 router.get("/get-all-products", (_req, res) => {
+	const productsData = readProductsData();
 	res.json(productsData);
-	res.sendFile(path.join(__dirname, "../views/getAllProducts.html"));
 });
 
 //get single product
 router.get("/get-product/:id", (req, res) => {
 	const requestedProductId = req.params.id;
-	if (isNaN(requestedProductId)) return res.send("Id is not a number");
+	const productsData = readProductsData();
+	const availableIds = vaildIds();
 
+	if (isNaN(requestedProductId)) return res.send("Id is not a number");
 	if (!availableIds.includes(+requestedProductId))
 		return res.send("no such a product in the list");
 
@@ -23,13 +40,15 @@ router.get("/get-product/:id", (req, res) => {
 });
 
 // create product
-router.post("/create-product/", (req, res) => {
+router.post("/create-product", (req, res) => {
 	const newProductData = req.body;
+	const productsData = readProductsData();
+	const availableIds = vaildIds();
 
 	if (!newProductData.id) return res.send("No id in the requested product");
 	if (isNaN(newProductData.id)) return res.send("Invalid id (not a number)");
 	if (availableIds.includes(newProductData.id))
-		return res.send("This user exists");
+		return res.status(409).send("This user exists");
 
 	const data = {
 		id: null,
@@ -43,10 +62,7 @@ router.post("/create-product/", (req, res) => {
 	};
 	productsData.push(data);
 	try {
-		writeFileSync(
-			path.join(__dirname, "../../products-data.json"),
-			JSON.stringify(productsData)
-		);
+		writeDataToFile(productsData);
 	} catch (error) {
 		console.log(error);
 	}
@@ -57,40 +73,34 @@ router.post("/create-product/", (req, res) => {
 router.put("/update-product/:id", (req, res) => {
 	const reqData = req.body;
 	const reqId = req.params.id;
-	if (isNaN(reqId)) return res.send("Invalid id (not a number)");
-	if (!availableIds.includes(+reqId))
-		return res.send("This user doesn't exists");
-	if (reqData.id) delete reqData.id;
+	const productsData = readProductsData();
+	const targetProduct = productsData.find((p) => p.id == reqId);
 
-	const targetProduct = productsData.find((p) => p.id == req.params.id);
 	for (const prop in reqData) {
 		targetProduct[prop] = reqData[prop];
 	}
 
 	try {
-		writeFileSync(
-			path.join(__dirname, "../../products-data.json"),
-			JSON.stringify(productsData)
-		);
+		writeDataToFile(productsData);
 	} catch (error) {
 		console.log(error);
 	}
-	res.send('Data Updated');
+	res.send("Data Updated");
 });
 
 //delete product
 router.delete("/remove-product/:id", (req, res) => {
 	const reqId = req.params.id;
+	const productsData = readProductsData();
+	const availableIds = vaildIds();
+
 	if (isNaN(reqId)) return res.send("Invalid id (not a number)");
 	if (!availableIds.includes(+reqId))
 		return res.send("This user doesn't exists");
-	let newData = productsData.filter((p) => p.id != reqId);
+	let newData = productsData.filter((p) => p.id != +reqId);
 
 	try {
-		writeFileSync(
-			path.join(__dirname, "../../products-data.json"),
-			JSON.stringify(newData)
-		);
+		writeDataToFile(newData);
 	} catch (error) {
 		console.log(error);
 	}
