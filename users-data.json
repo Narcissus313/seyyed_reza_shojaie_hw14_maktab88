@@ -1,9 +1,23 @@
 [
-  {
-    "firsname": "john",
-    "lastname": "smith",
-    "username": "john_smith",
-    "password": "user1234",
-    "gender": "male"
-  }
+	{
+		"firstname": "john",
+		"lastname": "smith",
+		"username": "john_smith",
+		"password": "user1234",
+		"gender": "male"
+	},
+	{
+		"firstname": "reza",
+		"lastname": "reza",
+		"username": "reza",
+		"password": "reza",
+		"gender": "male"
+	},
+	{
+		"firstname": null,
+		"lastname": null,
+		"username": "zz",
+		"password": "zz",
+		"gender": "male"
+	}
 ]

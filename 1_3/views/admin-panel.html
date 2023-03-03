@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    
+    <!-- alert box -->
+    <div class="alert d-none w-50 fixed-top opacity-75 fade mx-auto p-1 mt-2 d-flex justify-content-center align-content-center"
+        role="alert" id="alertBox">
+        <p class="text-center mt-3" id="alertText">alert text</p>
+    </div>
+
+
+    <div class="container-lg bg-light d-flex justify-content-between flex-column align-items-center mx-auto my-3 p-3">
+        <h1 class="mx-auto mt-3 mb-1">Users</h1>
+        
+        <table class="table table-light table-striped table-hover w-75 border mx-auto mt-3">
+            <thead class="border">
+                <tr>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">#</th>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">First Name</th>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">Last Name</th>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">Username</th>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">Password</th>
+                    <th scope="col" class="fw-bold fs-5 text-primary border">Gender</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <!-- modal for showing User info -->
+        <div class="modal fade" id="modalUserInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+<script src="/js/alert.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/renderPage.js"></script>
+
+</html>

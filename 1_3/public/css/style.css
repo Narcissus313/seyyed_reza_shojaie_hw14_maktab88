@@ -1,9 +1,4 @@
-td:hover {
-   cursor: pointer;
-}
-button.align-self-end{
-   transform: translate(50%,0);
-   border-radius: 100%;
-   width: 80px;
-   height: 80px;
+form.p-5 {
+   width: 500px;
+   background-color: rgba(0, 0, 0, 0.9);
 }
