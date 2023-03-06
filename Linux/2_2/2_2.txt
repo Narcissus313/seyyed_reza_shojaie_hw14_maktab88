@@ -1,0 +1,5 @@
+tree -L 1 
+tree -L 1 | tr '[:upper:]' '[:lower:]'
+tree -P '^.{6}$' -L 1  /home/reza/Desktop
+tree -P '(tr)*y' -L 1 /home/reza/Desktop 
+tree -P 'tr*?y' /home/reza/Desktop 
